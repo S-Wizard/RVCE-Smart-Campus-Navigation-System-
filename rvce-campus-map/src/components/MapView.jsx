@@ -15,31 +15,37 @@ import BuildingLabels from "./BuildingLabels";
 const MAP_WIDTH = 1200;
 const MAP_HEIGHT = 800;
 
-//temp
-const [gpsEnabled, setGpsEnabled] = useState(false);
-
-
 export default function MapView({ routeRequest }) {
   const canvasRef = useRef(null);
 
-  /* ================= USER LOCATION ================= */
+  /* ================= GPS ================= */
+  const [gpsEnabled, setGpsEnabled] = useState(false);
   const [userPos, setUserPos] = useState(null);
 
-  useEffect(() => {
-  if (!gpsEnabled) return;
-  if (!navigator.geolocation) return;
+useEffect(() => {
+  if (!navigator.geolocation) {
+    console.warn("Geolocation not supported");
+    return;
+  }
 
   const watchId = navigator.geolocation.watchPosition(
     pos => {
       const { latitude, longitude } = pos.coords;
-      setUserPos(gpsToMap(latitude, longitude));
+      const mapPos = gpsToMap(latitude, longitude);
+      setUserPos(mapPos);
     },
-    err => console.error("GPS error:", err),
-    { enableHighAccuracy: true }
+    err => {
+      console.error("GPS error:", err);
+    },
+    {
+      enableHighAccuracy: true,
+      maximumAge: 1000,
+      timeout: 10000
+    }
   );
 
   return () => navigator.geolocation.clearWatch(watchId);
-}, [gpsEnabled]);
+}, []);
 
 
   /* ================= PAN / ZOOM ================= */
@@ -61,7 +67,7 @@ export default function MapView({ routeRequest }) {
 
     const pts = Array.from(pointers.current.values());
 
-    // PAN
+    // 🟢 PAN
     if (pts.length === 1) {
       setOffset(o => ({
         x: o.x + e.movementX,
@@ -69,7 +75,7 @@ export default function MapView({ routeRequest }) {
       }));
     }
 
-    // PINCH ZOOM
+    // 🔵 PINCH ZOOM
     if (pts.length === 2) {
       const [p1, p2] = pts;
       const dist = Math.hypot(
@@ -83,6 +89,7 @@ export default function MapView({ routeRequest }) {
           Math.min(3, Math.max(0.6, s + delta * 0.002))
         );
       }
+
       lastDistance.current = dist;
     }
   }
@@ -105,6 +112,7 @@ export default function MapView({ routeRequest }) {
 
     const s = getRoadForBuilding(routeRequest.start);
     const e = getRoadForBuilding(routeRequest.end);
+
     if (!s || !e) return { path: [], startNode: null, endNode: null };
 
     return {
@@ -152,20 +160,23 @@ export default function MapView({ routeRequest }) {
             <circle {...nodeXY(endNode)} r="7" className="end-marker" />
           )}
         </svg>
-        /* ================= temp ================= */
-        {!gpsEnabled && (
-  <button className="gps-btn" onClick={enableGPS}>
-    📍 Enable Location
-  </button>
-)}
 
+        {/* GPS Button */}
+        {!gpsEnabled && (
+          <button className="gps-btn" onClick={() => setGpsEnabled(true)}>
+            📍 Enable Location
+          </button>
+        )}
 
         <BuildingLabels />
 
         {userPos && (
           <div
             className="user-marker"
-            style={{ left: `${userPos.x}%`, top: `${userPos.y}%` }}
+            style={{
+              left: `${userPos.x}%`,
+              top: `${userPos.y}%`
+            }}
           />
         )}
       </div>
@@ -200,8 +211,3 @@ function nodeXY(key) {
   };
 }
 
-//temmp
-
-function enableGPS() {
-  setGpsEnabled(true);
-}

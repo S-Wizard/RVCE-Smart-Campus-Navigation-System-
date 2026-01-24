@@ -5,8 +5,8 @@ export const MAP_BOUNDS = {
     lon: 77.49903652695254
   },
   bottomRight: {
-    lat: 12.92246,
-    lon: 77.50170
+    lat: 12.923340938625595,
+    lon: 77.50170633049751
   }
 };
 
@@ -24,3 +24,6 @@ export function gpsToMap(lat, lon) {
 
   return { x, y };
 }
+
+
+//temp
