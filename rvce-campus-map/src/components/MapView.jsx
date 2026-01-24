@@ -22,6 +22,32 @@ export default function MapView({ routeRequest }) {
   const [gpsEnabled, setGpsEnabled] = useState(false);
   const [userPos, setUserPos] = useState(null);
 
+useEffect(() => {
+  if (!navigator.geolocation) {
+    console.error("Geolocation not supported");
+    return;
+  }
+
+  const watchId = navigator.geolocation.watchPosition(
+    pos => {
+      const { latitude, longitude } = pos.coords;
+      console.log("GPS:", latitude, longitude);
+      setUserPos(gpsToMap(latitude, longitude));
+    },
+    err => {
+      console.error("GPS error:", err.message);
+    },
+    {
+      enableHighAccuracy: true,
+      maximumAge: 1000,
+      timeout: 10000
+    }
+  );
+
+  return () => navigator.geolocation.clearWatch(watchId);
+}, []);
+
+
 /*useEffect(() => {
   if (!navigator.geolocation) {
     console.warn("Geolocation not supported");
@@ -171,14 +197,15 @@ export default function MapView({ routeRequest }) {
         <BuildingLabels />
 
         {userPos && (
-          <div
-            className="user-marker"
-            style={{
-              left: `${userPos.x}%`,
-              top: `${userPos.y}%`
-            }}
-          />
-        )}
+  <div
+    className="user-marker"
+    style={{
+      left: `${userPos.x}%`,
+      top: `${userPos.y}%`
+    }}
+  />
+)}
+
       </div>
     </div>
   );
