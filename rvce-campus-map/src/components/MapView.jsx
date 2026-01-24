@@ -22,7 +22,7 @@ export default function MapView({ routeRequest }) {
   const [gpsEnabled, setGpsEnabled] = useState(false);
   const [userPos, setUserPos] = useState(null);
 
-useEffect(() => {
+/*useEffect(() => {
   if (!navigator.geolocation) {
     console.warn("Geolocation not supported");
     return;
@@ -46,7 +46,7 @@ useEffect(() => {
 
   return () => navigator.geolocation.clearWatch(watchId);
 }, []);
-
+*/
 
   /* ================= PAN / ZOOM ================= */
   const [scale, setScale] = useState(1.4);
