@@ -1,0 +1,23 @@
+:root {
+  --bg: #f4f6fb;
+  --panel: rgba(255,255,255,0.75);
+  --border: rgba(0,0,0,0.08);
+  --primary: #5c47e4;
+  --primary-dark: #4a38c9;
+  --text: #1f2937;
+  --muted: #6b7280;
+  --radius: 18px;
+  --shadow: 0 10px 30px rgba(0,0,0,0.12);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  margin: 0;
+  height: 100%;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont;
+  background: var(--bg);
+  color: var(--text);
+}

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>RVCE Campus Map</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<body>
+
+<header class="app-header">
+  <h1>RVCE Campus Navigation</h1>
+</header>
+
+<!-- SEARCH CARD -->
+<div class="search-card">
+  <select id="startSelect">
+    <option value="">📍 Start location</option>
+  </select>
+
+  <select id="endSelect">
+    <option value="">🎯 Destination</option>
+  </select>
+
+  <button id="findPathBtn">Find Route</button>
+</div>
+
+<!-- MAP -->
+<div id="map-viewport">
+  <div id="map-canvas">
+
+    <img src="assets/rvce-map.png" id="campus-map">
+
+    <svg id="route-layer" width="1200" height="800"></svg>
+    <div id="overlay-layer"></div>
+    <div id="user-marker" class="user-marker"></div>
+
+  </div>
+</div>
+
+<!-- ZOOM -->
+<div class="zoom-fab">
+  <button onclick="zoomIn()">＋</button>
+  <button onclick="zoomOut()">－</button>
+  <button onclick="resetZoom()">⟳</button>
+</div>
+
+<script src="script.js"></script>
+</body>
+
+</html>
