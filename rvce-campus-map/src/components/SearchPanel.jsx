@@ -12,10 +12,11 @@ export default function SearchPanel({ onFindPath }) {
 
       <select value={start} onChange={e => setStart(e.target.value)}>
         <option value="">📍 Start location</option>
+        <option value="Current Location">🔵 Current Location</option>
         {buildings.map(b => (
           <option key={b.name} value={b.name}>
-    {b.name}
-  </option>
+            {b.name}
+          </option>
         ))}
       </select>
 
@@ -23,8 +24,8 @@ export default function SearchPanel({ onFindPath }) {
         <option value="">🎯 Destination</option>
         {buildings.map(b => (
           <option key={b.name} value={b.name}>
-    {b.name}
-  </option>
+            {b.name}
+          </option>
         ))}
       </select>
 
