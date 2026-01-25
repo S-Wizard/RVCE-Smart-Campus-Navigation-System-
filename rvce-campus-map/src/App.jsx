@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import SearchPanel from "./components/SearchPanel";
+import SearchBar from "./components/SearchBar";
 import MapView from "./components/MapView";
 import DirectionsPanel from "./components/DirectionsPanel";
 import "./App.css";
@@ -96,15 +97,30 @@ export default function App() {
   function handleFindPath(start, end) {
     if (!start || !end) return;
     setRouteRequest({ start, end });
-    // Collapse search panel on mobile when route is found
     if (window.innerWidth < 768) {
       setIsSearchOpen(false);
     }
   }
 
+  function handleSelectPlace(name, type) {
+    const current = routeRequest || { start: "", end: "" };
+    const newReq = { ...current, [type]: name };
+    setRouteRequest(newReq);
+
+    // Auto-nav if both are present
+    if (newReq.start && newReq.end) {
+      handleFindPath(newReq.start, newReq.end);
+    }
+  }
+
   return (
     <div className="app-layout">
+      <SearchBar onSelectPlace={handleSelectPlace} />
+
       <SearchPanel
+        start={routeRequest?.start || ""}
+        end={routeRequest?.end || ""}
+        onUpdateRoute={(field, value) => handleSelectPlace(value, field)}
         onFindPath={handleFindPath}
         isOpen={isSearchOpen}
         setIsOpen={setIsSearchOpen}
@@ -131,3 +147,4 @@ export default function App() {
     </div>
   );
 }
+

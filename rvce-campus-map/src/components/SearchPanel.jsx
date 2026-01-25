@@ -2,10 +2,7 @@ import { useState } from "react";
 import { buildings } from "../data/buildings";
 import "./SearchPanel.css";
 
-export default function SearchPanel({ onFindPath, isOpen, setIsOpen }) {
-  const [start, setStart] = useState("");
-  const [end, setEnd] = useState("");
-
+export default function SearchPanel({ start, end, onUpdateRoute, onFindPath, isOpen, setIsOpen }) {
   if (!isOpen) {
     return (
       <button
@@ -32,14 +29,14 @@ export default function SearchPanel({ onFindPath, isOpen, setIsOpen }) {
 
       <button
         className="floating-loc-btn"
-        onClick={() => setStart("Current Location")}
+        onClick={() => onUpdateRoute("start", "Current Location")}
         title="Use My Location"
       >
         🎯
       </button>
 
       <div className="search-inputs">
-        <select value={start} onChange={e => setStart(e.target.value)}>
+        <select value={start} onChange={e => onUpdateRoute("start", e.target.value)}>
           <option value="">📍 Start location</option>
           {buildings.map(b => (
             <option key={b.name} value={b.name}>
@@ -52,7 +49,7 @@ export default function SearchPanel({ onFindPath, isOpen, setIsOpen }) {
           <div className="current-loc-badge">Using Current Location</div>
         )}
 
-        <select value={end} onChange={e => setEnd(e.target.value)}>
+        <select value={end} onChange={e => onUpdateRoute("end", e.target.value)}>
           <option value="">🎯 Destination</option>
           {buildings.map(b => (
             <option key={b.name} value={b.name}>

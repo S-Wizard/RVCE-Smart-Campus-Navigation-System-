@@ -1,12 +1,12 @@
 // RVCE map GPS bounds (replace later with accurate values)
 export const MAP_BOUNDS = {
   topLeft: {
-    lat: 12.924623443287123,
-    lon: 77.49903652695254
+    lat: 13.788155863882825,
+    lon: 77.79144716327114
   },
   bottomRight: {
-    lat: 12.923340938625595,
-    lon: 77.50170633049751
+    lat: 13.779674799291119,
+    lon: 77.79992095773365
   }
 };
 
