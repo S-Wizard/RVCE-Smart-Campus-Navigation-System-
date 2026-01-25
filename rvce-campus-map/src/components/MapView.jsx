@@ -153,7 +153,7 @@ function MapControls({
   path,
   startNode
 }) {
-  const { zoomToElement } = useTransformContext();
+  const { zoomToElement, resetTransform, centerView } = useTransformContext();
 
   /* ================= AUTO-NAV LOGIC ================= */
   useEffect(() => {
@@ -208,6 +208,20 @@ function MapControls({
             🎯 Re-center
           </button>
         )}
+
+        {/* Reset Map Button */}
+        <button
+          className="gps-btn reset-btn"
+          onClick={() => {
+            console.log("Resetting map view...");
+            resetTransform(); // First clear pan
+            setTimeout(() => centerView(1.4, 300), 50); // Then force center
+            setBearing(0);
+          }}
+          title="Reset View"
+        >
+          🔄
+        </button>
       </div>
     </>
   );

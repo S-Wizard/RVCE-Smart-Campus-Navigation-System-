@@ -30,7 +30,15 @@ export default function SearchPanel({ onFindPath, isOpen, setIsOpen }) {
         </button>
       </div>
 
-      <div className="search-group">
+      <button
+        className="floating-loc-btn"
+        onClick={() => setStart("Current Location")}
+        title="Use My Location"
+      >
+        🎯
+      </button>
+
+      <div className="search-inputs">
         <select value={start} onChange={e => setStart(e.target.value)}>
           <option value="">📍 Start location</option>
           {buildings.map(b => (
@@ -40,27 +48,19 @@ export default function SearchPanel({ onFindPath, isOpen, setIsOpen }) {
           ))}
         </select>
 
-        <button
-          className="loc-btn"
-          onClick={() => setStart("Current Location")}
-          title="Use My Location"
-        >
-          🎯
-        </button>
+        {start === "Current Location" && (
+          <div className="current-loc-badge">Using Current Location</div>
+        )}
+
+        <select value={end} onChange={e => setEnd(e.target.value)}>
+          <option value="">🎯 Destination</option>
+          {buildings.map(b => (
+            <option key={b.name} value={b.name}>
+              {b.name}
+            </option>
+          ))}
+        </select>
       </div>
-
-      {start === "Current Location" && (
-        <div className="current-loc-badge">Using Current Location</div>
-      )}
-
-      <select value={end} onChange={e => setEnd(e.target.value)}>
-        <option value="">🎯 Destination</option>
-        {buildings.map(b => (
-          <option key={b.name} value={b.name}>
-            {b.name}
-          </option>
-        ))}
-      </select>
 
       <button onClick={() => onFindPath(start, end)}>
         Find Route
