@@ -2,7 +2,7 @@ import { useTransformContext } from "react-zoom-pan-pinch";
 import { buildings } from "../data/buildings";
 import "./BuildingLabels.css";
 
-export default function BuildingLabels() {
+export default function BuildingLabels({ bearing = 0 }) {
   const { transformState } = useTransformContext();
   const scale = transformState.scale;
 
@@ -15,7 +15,7 @@ export default function BuildingLabels() {
           style={{
             left: `${b.x}%`,
             top: `${b.y}%`,
-            transform: `translate(-50%, -50%) scale(${1 / scale})`
+            transform: `translate(-50%, -50%) scale(${1 / scale}) rotate(${-bearing}deg)`
           }}
         >
           {b.name}
