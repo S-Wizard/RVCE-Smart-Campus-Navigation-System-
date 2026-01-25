@@ -137,6 +137,49 @@
   transform: translateY(0);
 }
 
+.search-group {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.search-group select {
+  flex: 1;
+}
+
+.loc-btn {
+  width: 48px;
+  height: 48px;
+  /* Match input height roughly */
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: white;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  box-shadow: none;
+  margin-top: 0 !important;
+  /* Override general button margin */
+  padding: 0 !important;
+}
+
+.loc-btn:hover {
+  background: var(--primary-soft);
+  border-color: var(--primary);
+  transform: translateY(-1px);
+}
+
+.current-loc-badge {
+  font-size: 13px;
+  color: var(--primary);
+  font-weight: 600;
+  margin-top: -8px;
+  margin-left: 4px;
+}
+
 /* Desktop – sidebar */
 @media (min-width: 768px) {
   .search-panel {
