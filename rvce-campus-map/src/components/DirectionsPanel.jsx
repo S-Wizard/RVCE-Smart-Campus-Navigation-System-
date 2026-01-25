@@ -1,45 +1,10 @@
 import { useMemo } from "react";
-import { buildingConnectors } from "../data/graph";
+import { generateInstructions } from "../utils/directionUtils";
 import "./DirectionsPanel.css";
 
 export default function DirectionsPanel({ path }) {
     const steps = useMemo(() => {
-        if (!path || path.length === 0) return [];
-
-        const landmarks = [];
-        const seen = new Set();
-
-        // Map road nodes back to buildings
-        // Create a lookup: roadId -> buildingName
-        const roadToBuilding = {};
-        buildingConnectors.forEach(c => {
-            // connecting "to" a road node.
-            roadToBuilding[c.to.id] = c.building;
-        });
-
-        path.forEach((nodeId, index) => {
-            // Is this node a connector to a building?
-            if (roadToBuilding[nodeId]) {
-                const buildingName = roadToBuilding[nodeId];
-
-                // Don't repeat the same building immediately
-                // Don't show start/end here? (Maybe just show navigation)
-                if (!seen.has(buildingName)) {
-                    landmarks.push({
-                        id: nodeId,
-                        text: `Pass by ${buildingName}`,
-                        icon: "🏢"
-                    });
-                    seen.add(buildingName);
-                }
-            }
-        });
-
-        if (landmarks.length === 0) {
-            return [{ id: "straight", text: "Follow the path", icon: "🚶" }];
-        }
-
-        return landmarks;
+        return generateInstructions(path);
     }, [path]);
 
     if (!path || path.length === 0) return null;
