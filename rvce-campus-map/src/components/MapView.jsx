@@ -56,43 +56,10 @@ export default function MapView({
     touchRef.current.active = false;
   };
 
-  /* ================= AUTO-NAV ================= */
-  const { zoomToElement, resetTransform } = useTransformContext();
 
-  useEffect(() => {
-    if (path && path.length > 1 && startNode) {
-      // 1. Auto-Zoom into start node
-      // Wait a tick for DOM to update
-      setTimeout(() => {
-        zoomToElement("start-node-marker", 2.5, 500);
-      }, 100);
 
-      // 2. Auto-Rotate towards first segment
-      // Calculate angle between path[0] (start) and path[1]
-      // We need coordinates. Helper: road[path[0]] -> road[path[1]]
-
-      const p1 = road[path[0]];
-      const p2 = road[path[1]];
-
-      if (p1 && p2) {
-        // Calculate bearing between p1 and p2
-        // atan2(dy, dx) gives angle from X axis.
-        // We want map to rotate such that the path is UP (North).
-        // Standard angle: 0 = Right, 90 = Down (screen coords).
-        // If path is pointing Right (0 deg), we want map rotated -90? No.
-        // Let's assume Map "Up" is -90 deg in screen math.
-
-        const angle = Math.atan2(p2.y - p1.y, p2.x - p1.x) * 180 / Math.PI;
-
-        // We want this angle to point UP (-90 deg visually).
-        // So we rotate the map by:  -90 - angle?
-        // Let's try: bearing = -(angle + 90)
-
-        const targetBearing = -(angle + 90);
-        setBearing(targetBearing);
-      }
-    }
-  }, [path, startNode]); // Re-run when path changes
+  /* ================= AUTO-NAV MOVED TO CONTROLS ================= */
+  // Removed useTransformContext from here to fix Context Error
 
   return (
     <div
@@ -169,14 +136,44 @@ export default function MapView({
           hasLocation={!!userPos}
           bearing={bearing}
           setBearing={setBearing}
+          path={path}
+          startNode={startNode}
         />
       </TransformWrapper>
     </div>
   );
 }
 
-function MapControls({ gpsEnabled, setGpsEnabled, hasLocation, bearing, setBearing }) {
+function MapControls({
+  gpsEnabled,
+  setGpsEnabled,
+  hasLocation,
+  bearing,
+  setBearing,
+  path,
+  startNode
+}) {
   const { zoomToElement } = useTransformContext();
+
+  /* ================= AUTO-NAV LOGIC ================= */
+  useEffect(() => {
+    if (path && path.length > 1 && startNode) {
+      // 1. Auto-Zoom
+      setTimeout(() => {
+        zoomToElement("start-node-marker", 2.5, 500);
+      }, 100);
+
+      // 2. Auto-Rotate
+      const p1 = road[path[0]];
+      const p2 = road[path[1]];
+
+      if (p1 && p2) {
+        const angle = Math.atan2(p2.y - p1.y, p2.x - p1.x) * 180 / Math.PI;
+        const targetBearing = -(angle + 90);
+        setBearing(targetBearing);
+      }
+    }
+  }, [path, startNode]);
 
   return (
     <>
