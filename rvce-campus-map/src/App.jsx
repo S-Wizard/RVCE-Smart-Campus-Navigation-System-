@@ -90,16 +90,35 @@ export default function App() {
     };
   }, [routeRequest, userPos]);
 
+  // UI State
+  const [isSearchOpen, setIsSearchOpen] = useState(true);
+
   function handleFindPath(start, end) {
     if (!start || !end) return;
     setRouteRequest({ start, end });
+    // Collapse search panel on mobile when route is found
+    if (window.innerWidth < 768) {
+      setIsSearchOpen(false);
+    }
   }
 
   return (
     <div className="app-layout">
-      <SearchPanel onFindPath={handleFindPath} />
+      <SearchPanel
+        onFindPath={handleFindPath}
+        isOpen={isSearchOpen}
+        setIsOpen={setIsSearchOpen}
+      />
 
-      {path.length > 0 && <DirectionsPanel path={path} />}
+      {path.length > 0 && (
+        <DirectionsPanel
+          path={path}
+          onClose={() => {
+            setRouteRequest(null);
+            setIsSearchOpen(true);
+          }}
+        />
+      )}
 
       <MapView
         gpsEnabled={gpsEnabled}

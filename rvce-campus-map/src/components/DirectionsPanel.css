@@ -1,8 +1,9 @@
+/* Main Panel Transition */
 .directions-panel {
     position: absolute;
     top: 24px;
     right: 24px;
-    width: 300px;
+    width: 320px;
     max-height: calc(100vh - 48px);
     overflow-y: auto;
 
@@ -12,69 +13,112 @@
     border: 1px solid var(--panel-border);
     border-radius: var(--radius);
     box-shadow: var(--shadow);
-    padding: 20px;
+    padding: 0;
+    /* Padding moved to children */
     z-index: 900;
 
     display: flex;
     flex-direction: column;
-    gap: 12px;
-
-    animation: slideIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-@keyframes slideIn {
-    from {
-        opacity: 0;
-        transform: translateX(20px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
-
-/* Mobile */
-@media (max-width: 767px) {
-    .directions-panel {
-        top: auto;
-        bottom: 24px;
-        /* Stack above search panel? Or maybe Search panel minimizes */
-        right: 12px;
-        left: 12px;
-        width: auto;
-        max-height: 40vh;
-    }
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .directions-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    background: rgba(255, 255, 255, 0.4);
+}
+
+.header-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
     font-weight: 700;
     font-size: 16px;
     color: var(--text-muted);
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    margin-bottom: 4px;
-    border-bottom: 1px solid var(--border);
-    padding-bottom: 8px;
+}
+
+.toggle-icon {
+    font-size: 14px;
+}
+
+.close-directions {
+    background: none;
+    border: none;
+    font-size: 18px;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 4px;
 }
 
 .steps-list {
+    padding: 20px;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 16px;
 }
 
-.step-item {
+/* Minimized State */
+.directions-panel.minimized {
+    width: 320px;
+    max-height: 60px;
+    /* Header only height approx */
+    overflow: hidden;
+}
+
+.mini-step {
+    padding: 0 20px 16px 20px;
     display: flex;
     align-items: center;
     gap: 12px;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* Mobile Bottom Sheet Behavior */
+@media (max-width: 767px) {
+    .directions-panel {
+        top: auto;
+        bottom: 24px;
+        right: 12px;
+        left: 12px;
+        width: auto;
+        max-height: 50vh;
+        border-radius: var(--radius-lg);
+    }
+
+    .directions-panel.minimized {
+        width: auto;
+        max-height: 60px;
+    }
+}
+
+/* ... keep shared step styles ... */
+.step-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
     font-size: 15px;
     color: var(--text);
-    padding: 4px 0;
+    line-height: 1.4;
 }
 
 .step-icon {
-    font-size: 18px;
+    font-size: 20px;
     width: 24px;
     text-align: center;
 }

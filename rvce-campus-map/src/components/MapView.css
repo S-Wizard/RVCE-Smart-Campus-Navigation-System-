@@ -89,6 +89,15 @@
   z-index: 100;
 }
 
+/* Mobile: Move GPS to top-right to avoid bottom sheet */
+@media (max-width: 767px) {
+  .gps-controls {
+    bottom: auto;
+    top: 20px;
+    right: 20px;
+  }
+}
+
 .gps-btn {
   background: white;
   border: none;
