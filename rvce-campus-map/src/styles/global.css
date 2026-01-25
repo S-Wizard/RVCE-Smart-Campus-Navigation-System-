@@ -1,23 +1,44 @@
 :root {
-  --bg: #f4f6fb;
-  --panel: rgba(255,255,255,0.75);
-  --border: rgba(0,0,0,0.08);
-  --primary: #5c47e4;
-  --primary-dark: #4a38c9;
-  --text: #1f2937;
-  --muted: #6b7280;
-  --radius: 18px;
-  --shadow: 0 10px 30px rgba(0,0,0,0.12);
+  /* Dynamic Background */
+  --bg: #f8fafc;
+  --bg-gradient: radial-gradient(circle at 10% 20%, rgb(239, 246, 255) 0%, rgb(255, 255, 255) 100%);
+
+  /* Glassmorphism Tokens */
+  --panel: rgba(255, 255, 255, 0.65);
+  --panel-border: rgba(255, 255, 255, 0.4);
+  --panel-blur: 20px;
+
+  /* Colors */
+  --primary: #4f46e5;
+  --primary-dark: #4338ca;
+  --primary-soft: rgba(79, 70, 229, 0.1);
+  --text: #1e293b;
+  --text-muted: #64748b;
+  --border: rgba(148, 163, 184, 0.2);
+
+  /* Radii & Shadows */
+  --radius: 24px;
+  --radius-sm: 12px;
+  --shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(255, 255, 255, 0.5);
+  --shadow-hover: 0 25px 50px -12px rgba(79, 70, 229, 0.25);
 }
 
 * {
   box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
 }
 
-html, body, #root {
+html,
+body,
+#root {
   margin: 0;
   height: 100%;
-  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont;
+  font-family: "Outfit", system-ui, -apple-system, sans-serif;
   background: var(--bg);
+  background-image: var(--bg-gradient);
   color: var(--text);
+}
+
+button {
+  font-family: inherit;
 }
