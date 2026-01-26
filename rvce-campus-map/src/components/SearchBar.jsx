@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { buildings } from "../data/buildings";
+import { Icon } from "./Icons";
 import "./SearchBar.css";
 
 export default function SearchBar({ onSelectPlace }) {
@@ -87,7 +88,7 @@ export default function SearchBar({ onSelectPlace }) {
     return (
         <div className="search-bar-container" ref={containerRef}>
             <div className={`search-input-wrapper ${isListening ? "listening" : ""}`}>
-                <span className="search-icon">🔍</span>
+                <Icon name="search" size={20} className="search-icon" aria-label="Search" />
                 <input
                     type="text"
                     placeholder={isListening ? "Listening..." : "Search campus places..."}
@@ -98,14 +99,17 @@ export default function SearchBar({ onSelectPlace }) {
 
                 <div className="search-actions">
                     {query && (
-                        <button className="clear-btn" onClick={() => setQuery("")}>✕</button>
+                        <button className="clear-btn" onClick={() => setQuery("")} aria-label="Clear search">
+                            <Icon name="clear" size={18} />
+                        </button>
                     )}
                     <button
                         className={`mic-btn ${isListening ? "active" : ""}`}
                         onClick={toggleListening}
                         title="Voice Search"
+                        aria-label={isListening ? "Stop listening" : "Start voice search"}
                     >
-                        {isListening ? "🛑" : "🎤"}
+                        {isListening ? <Icon name="stop" size={18} /> : <Icon name="mic" size={18} />}
                     </button>
                 </div>
             </div>
@@ -117,12 +121,12 @@ export default function SearchBar({ onSelectPlace }) {
                     {suggestions.map((s) => (
                         <div key={s.name} className="suggestion-item">
                             <div className="suggestion-info">
-                                <span className="place-icon">📍</span>
+                                <Icon name="location-filled" size={16} className="place-icon" />
                                 <span className="place-name">{s.name}</span>
                             </div>
                             <div className="suggestion-actions">
-                                <button onClick={() => handleSelect(s, "start")}>Start</button>
-                                <button onClick={() => handleSelect(s, "end")}>Dest</button>
+                                <button onClick={() => handleSelect(s, "start")} aria-label={`Start from ${s.name}`}>Start</button>
+                                <button onClick={() => handleSelect(s, "end")} aria-label={`Go to ${s.name}`}>Dest</button>
                             </div>
                         </div>
                     ))}

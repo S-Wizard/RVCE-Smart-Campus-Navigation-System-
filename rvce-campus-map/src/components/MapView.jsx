@@ -1,5 +1,6 @@
 import { useRef, useState, useEffect } from "react";
 import { TransformWrapper, TransformComponent, useTransformContext } from "react-zoom-pan-pinch";
+import { Icon } from "./Icons";
 import "./MapView.css";
 
 import {
@@ -181,25 +182,29 @@ function MapControls({
   return (
     <>
       {/* Compass - Top Right */}
-      <div className="compass-container" onClick={() => setBearing(0)}>
+      <div className="compass-container" onClick={() => setBearing(0)} aria-label="Reset North">
         <div
           className="compass-arrow"
           style={{ transform: `rotate(${-bearing}deg)` }}
         >
-          ➤
+          <Icon name="compass-arrow" size={28} />
         </div>
       </div>
 
       <div className="gps-controls">
         {/* Rotation Controls */}
         <div className="rotation-controls">
-          <button className="rot-btn" onClick={() => setBearing(b => b - 45)}>⟲</button>
-          <button className="rot-btn" onClick={() => setBearing(b => b + 45)}>⟳</button>
+          <button className="rot-btn" onClick={() => setBearing(b => b - 45)} aria-label="Rotate left">
+            <Icon name="rotate-left" size={20} />
+          </button>
+          <button className="rot-btn" onClick={() => setBearing(b => b + 45)} aria-label="Rotate right">
+            <Icon name="rotate-right" size={20} />
+          </button>
         </div>
 
         {!gpsEnabled && (
           <button className="gps-btn" onClick={() => setGpsEnabled(true)}>
-            📍 Enable Location
+            <Icon name="location-filled" size={18} /> Enable Location
           </button>
         )}
 
@@ -207,8 +212,9 @@ function MapControls({
           <button
             className="gps-btn"
             onClick={() => zoomToElement("user-marker", 2)} // scale 2
+            aria-label="Recent to user location"
           >
-            🎯 Re-center
+            <Icon name="recenter" size={18} /> Re-center
           </button>
         )}
 
@@ -223,8 +229,9 @@ function MapControls({
             onResetAll?.(); // Clear route data
           }}
           title="Reset View"
+          aria-label="Reset Map"
         >
-          🔄
+          <Icon name="reset" size={18} />
         </button>
       </div>
     </>

@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { generateInstructions } from "../utils/directionUtils";
+import { Icon } from "./Icons";
 import "./DirectionsPanel.css";
 
 export default function DirectionsPanel({ path, onClose }) {
@@ -13,22 +14,24 @@ export default function DirectionsPanel({ path, onClose }) {
 
     return (
         <div className={`directions-panel ${isMinimized ? "minimized" : ""}`}>
-            <div className="directions-header" onClick={() => setIsMinimized(!isMinimized)}>
+            <div className="directions-header" onClick={() => setIsMinimized(!isMinimized)} aria-label={isMinimized ? "Expand instructions" : "Minimize instructions"}>
                 <div className="header-title">
                     <span>Route Guide</span>
-                    <span className="toggle-icon">{isMinimized ? "🔼" : "🔽"}</span>
+                    <Icon name={isMinimized ? "chevron-up" : "chevron-down"} size={16} className="toggle-icon" />
                 </div>
                 <button className="close-directions" onClick={(e) => {
                     e.stopPropagation();
                     onClose();
-                }}>✕</button>
+                }} aria-label="Close directions">
+                    <Icon name="close" size={18} />
+                </button>
             </div>
 
             {!isMinimized && (
                 <div className="steps-list">
                     {steps.map(step => (
                         <div key={step.id} className={`step-item ${step.id}`}>
-                            <span className="step-icon">{step.icon}</span>
+                            <Icon name={step.icon} size={20} className="step-icon" />
                             <span className="step-text">{step.text}</span>
                         </div>
                     ))}
@@ -38,7 +41,7 @@ export default function DirectionsPanel({ path, onClose }) {
             {/* Minimized View: Show just next step or destination */}
             {isMinimized && steps.length > 1 && (
                 <div className="mini-step">
-                    <span className="step-icon">{steps[1].icon}</span>
+                    <Icon name={steps[1].icon} size={20} className="step-icon" />
                     <span className="step-text">{steps[1].text}</span>
                 </div>
             )}

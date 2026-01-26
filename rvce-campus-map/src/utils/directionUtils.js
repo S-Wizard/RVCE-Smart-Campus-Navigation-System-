@@ -44,7 +44,7 @@ export function generateInstructions(path) {
     const startName = nodeToBuilding[startId] || `Road ${startId}`;
     instructions.push({
         id: "start",
-        icon: "📍",
+        icon: "start",
         text: `Start at ${startName}`
     });
 
@@ -72,7 +72,7 @@ export function generateInstructions(path) {
 
                 instructions.push({
                     id: nextId,
-                    icon: turn === "left" ? "⬅️" : "➡️",
+                    icon: turn === "left" ? "arrow-left" : "arrow-right",
                     text: text
                 });
 
@@ -90,7 +90,7 @@ export function generateInstructions(path) {
         if (landmark) {
             instructions.push({
                 id: nextId + "-pass",
-                icon: "⬆️",
+                icon: "arrow-up",
                 text: `Go straight past ${landmark}`
             });
         } else {
@@ -102,7 +102,7 @@ export function generateInstructions(path) {
             if (!last || !last.text.startsWith("Go straight")) {
                 instructions.push({
                     id: nextId + "-straight",
-                    icon: "⬆️",
+                    icon: "arrow-up",
                     text: "Go straight"
                 });
             }
@@ -116,7 +116,7 @@ export function generateInstructions(path) {
     const endName = nodeToBuilding[endId] || `Destination`;
     instructions.push({
         id: "end",
-        icon: "🎯",
+        icon: "destination",
         text: `Arrive at ${endName}`
     });
 

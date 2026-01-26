@@ -1,5 +1,5 @@
-import { useState } from "react";
 import { buildings } from "../data/buildings";
+import { Icon } from "./Icons";
 import "./SearchPanel.css";
 
 export default function SearchPanel({ start, end, onUpdateRoute, onFindPath, isOpen, setIsOpen }) {
@@ -8,9 +8,9 @@ export default function SearchPanel({ start, end, onUpdateRoute, onFindPath, isO
       <button
         className="search-fab"
         onClick={() => setIsOpen(true)}
-        aria-label="Open Search"
+        aria-label="Open Navigation"
       >
-        🔍
+        <Icon name="search" size={24} />
       </button>
     );
   }
@@ -22,8 +22,9 @@ export default function SearchPanel({ start, end, onUpdateRoute, onFindPath, isO
         <button
           className="close-btn"
           onClick={() => setIsOpen(false)}
+          aria-label="Close"
         >
-          ✕
+          <Icon name="close" size={20} />
         </button>
       </div>
 
@@ -31,14 +32,15 @@ export default function SearchPanel({ start, end, onUpdateRoute, onFindPath, isO
         className="floating-loc-btn"
         onClick={() => onUpdateRoute("start", "Current Location")}
         title="Use My Location"
+        aria-label="Use My Location"
       >
-        🎯
+        <Icon name="target" size={20} />
       </button>
 
       <div className="search-inputs">
-        <select value={start} onChange={e => onUpdateRoute("start", e.target.value)}>
-          <option value="">📍 Start location</option>
-          <option value="Current Location">🔵 Current Location</option>
+        <select value={start} onChange={e => onUpdateRoute("start", e.target.value)} aria-label="Start location selection">
+          <option value="">Start location</option>
+          <option value="Current Location">Current Location</option>
           {buildings.map(b => (
             <option key={b.name} value={b.name}>
               {b.name}
@@ -47,11 +49,11 @@ export default function SearchPanel({ start, end, onUpdateRoute, onFindPath, isO
         </select>
 
         {start === "Current Location" && (
-          <div className="current-loc-badge">Using Current Location</div>
+          <div className="current-loc-badge">Using GPS Location</div>
         )}
 
-        <select value={end} onChange={e => onUpdateRoute("end", e.target.value)}>
-          <option value="">🎯 Destination</option>
+        <select value={end} onChange={e => onUpdateRoute("end", e.target.value)} aria-label="Destination selection">
+          <option value="">Destination</option>
           {buildings.map(b => (
             <option key={b.name} value={b.name}>
               {b.name}
