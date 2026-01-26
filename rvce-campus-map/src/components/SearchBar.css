@@ -53,7 +53,70 @@
     color: var(--text-muted);
     cursor: pointer;
     padding: 4px;
+}
+
+.search-actions {
+    display: flex;
+    align-items: center;
+    gap: 4px;
     margin-left: 8px;
+}
+
+.mic-btn {
+    background: none;
+    border: none;
+    font-size: 18px;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.2s;
+}
+
+.mic-btn:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.mic-btn.active {
+    color: #ef4444;
+    animation: pulse 1.5s infinite;
+    background: rgba(239, 68, 68, 0.1);
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4);
+    }
+
+    70% {
+        box-shadow: 0 0 0 10px rgba(239, 68, 68, 0);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+    }
+}
+
+.voice-error {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 12px;
+    background: #1f2937;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 500;
+    z-index: 2001;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.search-input-wrapper.listening {
+    border-color: #ef4444;
+    background: white;
 }
 
 .suggestions-dropdown {
@@ -64,6 +127,7 @@
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
     overflow: hidden;
     animation: slideDown 0.2s ease-out;
+    margin-top: 4px;
 }
 
 @keyframes slideDown {

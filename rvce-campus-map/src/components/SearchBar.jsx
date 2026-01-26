@@ -6,7 +6,10 @@ export default function SearchBar({ onSelectPlace }) {
     const [query, setQuery] = useState("");
     const [suggestions, setSuggestions] = useState([]);
     const [showDropdown, setShowDropdown] = useState(false);
+    const [isListening, setIsListening] = useState(false);
+    const [errorMsg, setErrorMsg] = useState("");
     const containerRef = useRef(null);
+    const recognitionRef = useRef(null);
 
     useEffect(() => {
         if (query.trim().length > 0) {
@@ -20,6 +23,49 @@ export default function SearchBar({ onSelectPlace }) {
             setShowDropdown(false);
         }
     }, [query]);
+
+    // Initialize Speech Recognition
+    useEffect(() => {
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (SpeechRecognition) {
+            recognitionRef.current = new SpeechRecognition();
+            recognitionRef.current.continuous = false;
+            recognitionRef.current.interimResults = false;
+            recognitionRef.current.lang = "en-US";
+
+            recognitionRef.current.onresult = (event) => {
+                const transcript = event.results[0][0].transcript;
+                setQuery(transcript);
+                setIsListening(false);
+            };
+
+            recognitionRef.current.onerror = (event) => {
+                console.error("Speech Recognition Error:", event.error);
+                setErrorMsg(event.error === "not-allowed" ? "Mic permission denied" : "Couldn't recognize");
+                setIsListening(false);
+                setTimeout(() => setErrorMsg(""), 3000);
+            };
+
+            recognitionRef.current.onend = () => {
+                setIsListening(false);
+            };
+        }
+    }, []);
+
+    const toggleListening = () => {
+        if (!recognitionRef.current) {
+            setErrorMsg("Speech API not supported");
+            return;
+        }
+
+        if (isListening) {
+            recognitionRef.current.stop();
+        } else {
+            setErrorMsg("");
+            recognitionRef.current.start();
+            setIsListening(true);
+        }
+    };
 
     // Click away to close
     useEffect(() => {
@@ -40,19 +86,31 @@ export default function SearchBar({ onSelectPlace }) {
 
     return (
         <div className="search-bar-container" ref={containerRef}>
-            <div className="search-input-wrapper">
+            <div className={`search-input-wrapper ${isListening ? "listening" : ""}`}>
                 <span className="search-icon">🔍</span>
                 <input
                     type="text"
-                    placeholder="Search campus places..."
+                    placeholder={isListening ? "Listening..." : "Search campus places..."}
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
                     onFocus={() => query && setShowDropdown(true)}
                 />
-                {query && (
-                    <button className="clear-btn" onClick={() => setQuery("")}>✕</button>
-                )}
+
+                <div className="search-actions">
+                    {query && (
+                        <button className="clear-btn" onClick={() => setQuery("")}>✕</button>
+                    )}
+                    <button
+                        className={`mic-btn ${isListening ? "active" : ""}`}
+                        onClick={toggleListening}
+                        title="Voice Search"
+                    >
+                        {isListening ? "🛑" : "🎤"}
+                    </button>
+                </div>
             </div>
+
+            {errorMsg && <div className="voice-error">{errorMsg}</div>}
 
             {showDropdown && suggestions.length > 0 && (
                 <div className="suggestions-dropdown">

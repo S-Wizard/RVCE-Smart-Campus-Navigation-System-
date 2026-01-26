@@ -18,7 +18,8 @@ export default function MapView({
   userPos,
   path,
   startNode,
-  endNode
+  endNode,
+  onResetAll
 }) {
   const [bearing, setBearing] = useState(0);
   const touchRef = useRef({
@@ -138,6 +139,7 @@ export default function MapView({
           setBearing={setBearing}
           path={path}
           startNode={startNode}
+          onResetAll={onResetAll}
         />
       </TransformWrapper>
     </div>
@@ -151,7 +153,8 @@ function MapControls({
   bearing,
   setBearing,
   path,
-  startNode
+  startNode,
+  onResetAll
 }) {
   const { zoomToElement, resetTransform, centerView } = useTransformContext();
 
@@ -213,10 +216,11 @@ function MapControls({
         <button
           className="gps-btn reset-btn"
           onClick={() => {
-            console.log("Resetting map view...");
+            console.log("Resetting map view and route data...");
             resetTransform(); // First clear pan
             setTimeout(() => centerView(1.4, 300), 50); // Then force center
             setBearing(0);
+            onResetAll?.(); // Clear route data
           }}
           title="Reset View"
         >

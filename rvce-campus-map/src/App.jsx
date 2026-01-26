@@ -113,6 +113,11 @@ export default function App() {
     }
   }
 
+  function handleResetAll() {
+    setRouteRequest(null);
+    setIsSearchOpen(true);
+  }
+
   return (
     <div className="app-layout">
       <SearchBar onSelectPlace={handleSelectPlace} />
@@ -143,6 +148,7 @@ export default function App() {
         path={path}
         startNode={startNode}
         endNode={endNode}
+        onResetAll={handleResetAll}
       />
     </div>
   );

@@ -38,6 +38,7 @@ export default function SearchPanel({ start, end, onUpdateRoute, onFindPath, isO
       <div className="search-inputs">
         <select value={start} onChange={e => onUpdateRoute("start", e.target.value)}>
           <option value="">📍 Start location</option>
+          <option value="Current Location">🔵 Current Location</option>
           {buildings.map(b => (
             <option key={b.name} value={b.name}>
               {b.name}
