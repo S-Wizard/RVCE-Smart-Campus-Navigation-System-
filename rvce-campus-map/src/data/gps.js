@@ -1,12 +1,21 @@
-// RVCE map GPS bounds (replace later with accurate values)
+/**
+ * HOW TO CALIBRATE MAP_BOUNDS:
+ * 1. Open Google Maps and find your campus.
+ * 2. Identify the exact spot that corresponds to the TOP-LEFT corner of your map image (rvce-map.png).
+ *    - Right-click on that spot in Google Maps to copy the Latitude and Longitude.
+ * 3. Do the same for the BOTTOM-RIGHT corner of your map image.
+ * 4. Replace the values below with the ones you copied.
+ * 
+ * NOTE: For best accuracy, ensure your map image is oriented with True North at the top.
+ */
 export const MAP_BOUNDS = {
   topLeft: {
-    lat: 12.924623443287123,
-    lon: 77.49903652695254
+    lat: 12.924474998417347, // Replace with actual Top-Left Latitude
+    lon: 77.49901558094034    // Replace with actual Top-Left Longitude
   },
   bottomRight: {
-    lat: 12.923340938625595,
-    lon: 77.50170633049751
+    lat: 12.922538345503789, // Replace with actual Bottom-Right Latitude
+    lon: 77.50111929437894  // Replace with actual Bottom-Right Longitude
   }
 };
 
