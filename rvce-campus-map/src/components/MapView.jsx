@@ -1,6 +1,7 @@
 import { useRef, useState, useEffect } from "react";
 import { TransformWrapper, TransformComponent, useTransformContext } from "react-zoom-pan-pinch";
 import { Icon } from "./Icons";
+import PlacePopup from "./PlacePopup";
 import "./MapView.css";
 
 import {
@@ -20,9 +21,11 @@ export default function MapView({
   path,
   startNode,
   endNode,
-  onResetAll
+  onResetAll,
+  onSelectPlace
 }) {
   const [bearing, setBearing] = useState(0);
+  const [selectedPlace, setSelectedPlace] = useState(null);
   const touchRef = useRef({
     angle: 0,
     startAngle: 0,
@@ -117,7 +120,7 @@ export default function MapView({
               )}
             </svg>
 
-            <BuildingLabels bearing={bearing} />
+            <BuildingLabels bearing={bearing} onPlaceClick={setSelectedPlace} />
 
             {userPos && (
               <div
@@ -143,6 +146,15 @@ export default function MapView({
           onResetAll={onResetAll}
         />
       </TransformWrapper>
+      {/* Place Details Popup */}
+      {selectedPlace && (
+        <PlacePopup
+          place={selectedPlace}
+          onClose={() => setSelectedPlace(null)}
+          onSetStart={(name) => onSelectPlace(name, 'start')}
+          onSetEnd={(name) => onSelectPlace(name, 'end')}
+        />
+      )}
     </div>
   );
 }

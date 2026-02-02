@@ -149,6 +149,7 @@ export default function App() {
         startNode={startNode}
         endNode={endNode}
         onResetAll={handleResetAll}
+        onSelectPlace={handleSelectPlace}
       />
     </div>
   );
