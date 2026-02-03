@@ -9,7 +9,7 @@ import { Icon } from './Icons';
  * - Desktop: Anchored popup near the location.
  * - Mobile: Bottom sheet style for better reachability.
  */
-export default function PlacePopup({ place, onClose, onSetStart, onSetEnd }) {
+export default function PlacePopup({ place, onClose, onSetStart, onSetEnd, isFavorite, onToggleFavorite, user }) {
     if (!place) return null;
 
     return (
@@ -25,13 +25,24 @@ export default function PlacePopup({ place, onClose, onSetStart, onSetEnd }) {
                         <span className="popup-type-tag">{place.type || 'Building'}</span>
                         <h3 id="popup-title">{place.name}</h3>
                     </div>
-                    <button
-                        className="popup-close-btn"
-                        onClick={onClose}
-                        aria-label="Close details"
-                    >
-                        <Icon name="close" size={20} />
-                    </button>
+                    <div className="popup-actions-top">
+                        {user && (
+                            <button
+                                className={`popup-fav-btn ${isFavorite ? 'active' : ''}`}
+                                onClick={() => onToggleFavorite(place)}
+                                aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
+                            >
+                                <Icon name="star" size={20} />
+                            </button>
+                        )}
+                        <button
+                            className="popup-close-btn"
+                            onClick={onClose}
+                            aria-label="Close details"
+                        >
+                            <Icon name="close" size={20} />
+                        </button>
+                    </div>
                 </div>
 
                 <div className="popup-body">

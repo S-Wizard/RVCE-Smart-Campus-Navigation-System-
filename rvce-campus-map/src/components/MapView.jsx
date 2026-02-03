@@ -22,7 +22,10 @@ export default function MapView({
   startNode,
   endNode,
   onResetAll,
-  onSelectPlace
+  onSelectPlace,
+  user,
+  favorites,
+  onToggleFavorite
 }) {
   const [bearing, setBearing] = useState(0);
   const [selectedPlace, setSelectedPlace] = useState(null);
@@ -153,6 +156,9 @@ export default function MapView({
           onClose={() => setSelectedPlace(null)}
           onSetStart={(name) => onSelectPlace(name, 'start')}
           onSetEnd={(name) => onSelectPlace(name, 'end')}
+          user={user}
+          isFavorite={favorites.some(f => f.locationName === selectedPlace.name)}
+          onToggleFavorite={onToggleFavorite}
         />
       )}
     </div>
@@ -167,7 +173,11 @@ function MapControls({
   setBearing,
   path,
   startNode,
-  onResetAll
+  onResetAll,
+  user,
+  favorites,
+  onToggleFavorite,
+  onSelectPlace
 }) {
   const { zoomToElement, resetTransform, centerView } = useTransformContext();
 

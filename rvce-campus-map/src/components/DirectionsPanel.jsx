@@ -3,7 +3,7 @@ import { generateInstructions } from "../utils/directionUtils";
 import { Icon } from "./Icons";
 import "./DirectionsPanel.css";
 
-export default function DirectionsPanel({ path, onClose }) {
+export default function DirectionsPanel({ path, onClose, user, onSaveRoute, routeName }) {
     const [isMinimized, setIsMinimized] = useState(false);
 
     const steps = useMemo(() => {
@@ -43,6 +43,15 @@ export default function DirectionsPanel({ path, onClose }) {
                 <div className="mini-step">
                     <Icon name={steps[1].icon} size={20} className="step-icon" />
                     <span className="step-text">{steps[1].text}</span>
+                </div>
+            )}
+
+            {!isMinimized && user && (
+                <div className="directions-actions">
+                    <button className="save-route-btn" onClick={onSaveRoute}>
+                        <Icon name="star" size={16} />
+                        <span>{routeName ? 'Route Saved' : 'Save Route'}</span>
+                    </button>
                 </div>
             )}
         </div>

@@ -56,6 +56,35 @@
     margin-bottom: 0.4rem;
 }
 
+.popup-actions-top {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.popup-fav-btn {
+    background: rgba(0, 0, 0, 0.05);
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #94a3b8;
+    transition: all 0.2s;
+}
+
+.popup-fav-btn:hover {
+    background: rgba(0, 0, 0, 0.1);
+    color: #64748b;
+}
+
+.popup-fav-btn.active {
+    color: #eab308;
+    background: rgba(234, 179, 8, 0.1);
+}
+
 .popup-close-btn {
     background: rgba(0, 0, 0, 0.05);
     border: none;

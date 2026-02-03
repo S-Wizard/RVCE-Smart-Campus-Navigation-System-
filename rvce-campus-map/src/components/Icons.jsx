@@ -23,6 +23,9 @@ export const Icon = ({ name, size = 20, className = "", ...props }) => {
         logout: (
             <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9" />
         ),
+        star: (
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+        ),
         location: (
             <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
         ),

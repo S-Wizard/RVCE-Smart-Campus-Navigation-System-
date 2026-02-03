@@ -25,6 +25,14 @@ export default function App() {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
 
+  /* ================= USER DATA STATE ================= */
+  const [savedRoutes, setSavedRoutes] = useState([]);
+  const [favorites, setFavorites] = useState([]);
+  const [history, setHistory] = useState([]);
+  const [isRouteSaved, setIsRouteSaved] = useState(false);
+
+  const apiUrl = (import.meta.env.VITE_API_URL || 'http://localhost:5000').replace(/\/$/, '');
+
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
@@ -35,17 +43,126 @@ export default function App() {
       })
         .then(res => res.json())
         .then(data => {
-          if (data.username) setUser(data);
-          else localStorage.removeItem('token');
+          if (data.username) {
+            setUser(data);
+            fetchUserData(token);
+          } else {
+            localStorage.removeItem('token');
+          }
         })
-        .catch(() => localStorage.removeItem('token'));
+        .catch(() => {
+          localStorage.removeItem('token');
+        });
     }
   }, []);
+
+  const fetchUserData = async (token) => {
+    try {
+      const headers = { 'Authorization': `Bearer ${token}` };
+      const [routesRes, favsRes, historyRes] = await Promise.all([
+        fetch(`${apiUrl}/api/user/routes`, { headers }),
+        fetch(`${apiUrl}/api/user/favorites`, { headers }),
+        fetch(`${apiUrl}/api/user/history`, { headers })
+      ]);
+
+      if (routesRes.ok) setSavedRoutes(await routesRes.json());
+      if (favsRes.ok) setFavorites(await favsRes.json());
+      if (historyRes.ok) setHistory(await historyRes.json());
+    } catch (err) {
+      console.error('Error fetching user data:', err);
+    }
+  };
 
   const handleLogout = () => {
     localStorage.removeItem('token');
     setUser(null);
     setIsProfileOpen(false);
+    setSavedRoutes([]);
+    setFavorites([]);
+    setHistory([]);
+  };
+
+  /* ================= USER ACTIONS ================= */
+
+  const handleSaveRoute = async () => {
+    if (!user || path.length === 0) return;
+    const token = localStorage.getItem('token');
+    try {
+      const response = await fetch(`${apiUrl}/api/user/routes/save`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          name: `${routeRequest.start} to ${routeRequest.end}`,
+          start: routeRequest.start,
+          end: routeRequest.end,
+          path: path
+        })
+      });
+      if (response.ok) {
+        setIsRouteSaved(true);
+        fetchUserData(token);
+      }
+    } catch (err) {
+      console.error('Save route error:', err);
+    }
+  };
+
+  const handleToggleFavorite = async (location) => {
+    if (!user) return;
+    const token = localStorage.getItem('token');
+    const isFav = favorites.some(f => f.locationName === location.name);
+
+    try {
+      const response = await fetch(`${apiUrl}/api/user/favorites/${isFav ? location.name : 'add'}`, {
+        method: isFav ? 'DELETE' : 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: isFav ? null : JSON.stringify({
+          locationName: location.name,
+          nodeId: location.id
+        })
+      });
+      if (response.ok) fetchUserData(token);
+    } catch (err) {
+      console.error('Toggle favorite error:', err);
+    }
+  };
+
+  const handleLoadRoute = (savedPath) => {
+    setPath(savedPath);
+    setStartNode(savedPath[0]);
+    setEndNode(savedPath[savedPath.length - 1]);
+    setRouteRequest({
+      start: savedPath[0], // Simplified: nodes are named items in graph
+      end: savedPath[savedPath.length - 1]
+    });
+  };
+
+  const logHistory = async (newPath) => {
+    if (!user || newPath.length === 0) return;
+    const token = localStorage.getItem('token');
+    try {
+      await fetch(`${apiUrl}/api/user/history/add`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          start: routeRequest.start,
+          end: routeRequest.end,
+          path: newPath
+        })
+      });
+      fetchUserData(token);
+    } catch (err) {
+      console.error('Log history error:', err);
+    }
   };
 
   /* ================= GPS LOGIC ================= */
@@ -126,11 +243,19 @@ export default function App() {
 
   function handleFindPath(start, end) {
     if (!start || !end) return;
+    setIsRouteSaved(false); // New route, reset save state
     setRouteRequest({ start, end });
     if (window.innerWidth < 768) {
       setIsSearchOpen(false);
     }
   }
+
+  // Automatic History Logging
+  useEffect(() => {
+    if (path && path.length > 0) {
+      logHistory(path);
+    }
+  }, [path]);
 
   function handleSelectPlace(name, type) {
     const current = routeRequest || { start: "", end: "" };
@@ -170,6 +295,27 @@ export default function App() {
           user={user}
           onLogout={handleLogout}
           onClose={() => setIsProfileOpen(false)}
+          savedRoutes={savedRoutes}
+          favorites={favorites}
+          history={history}
+          onLoadRoute={handleLoadRoute}
+          onDeleteRoute={async (id) => {
+            const token = localStorage.getItem('token');
+            await fetch(`${apiUrl}/api/user/routes/${id}`, {
+              method: 'DELETE',
+              headers: { 'Authorization': `Bearer ${token}` }
+            });
+            fetchUserData(token);
+          }}
+          onDeleteFavorite={handleToggleFavorite}
+          onClearHistory={async () => {
+            const token = localStorage.getItem('token');
+            await fetch(`${apiUrl}/api/user/history`, {
+              method: 'DELETE',
+              headers: { 'Authorization': `Bearer ${token}` }
+            });
+            fetchUserData(token);
+          }}
         />
       )}
 
@@ -188,7 +334,11 @@ export default function App() {
           onClose={() => {
             setRouteRequest(null);
             setIsSearchOpen(true);
+            setIsRouteSaved(false);
           }}
+          user={user}
+          onSaveRoute={handleSaveRoute}
+          routeName={isRouteSaved ? "Saved" : null}
         />
       )}
 
@@ -201,6 +351,9 @@ export default function App() {
         endNode={endNode}
         onResetAll={handleResetAll}
         onSelectPlace={handleSelectPlace}
+        user={user}
+        favorites={favorites}
+        onToggleFavorite={handleToggleFavorite}
       />
     </div>
   );
