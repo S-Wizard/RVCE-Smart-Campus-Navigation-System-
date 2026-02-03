@@ -244,11 +244,8 @@ function MapControls({
         <button
           className="gps-btn reset-btn"
           onClick={() => {
-            console.log("Resetting map view and route data...");
-            resetTransform(); // First clear pan
-            setTimeout(() => centerView(1.4, 300), 50); // Then force center
-            setBearing(0);
-            onResetAll?.(); // Clear route data
+            resetTransform(400); // Smoothly reset zoom and pan
+            setBearing(0); // Reset rotation
           }}
           title="Reset View"
           aria-label="Reset Map"
