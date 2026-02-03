@@ -10,12 +10,12 @@
  */
 export const MAP_BOUNDS = {
   topLeft: {
-    lat: 12.924813080306123, // Replace with actual Top-Left Latitude
-    lon: 77.49903051629468   // Replace with actual Top-Left Longitude
+    lat: 12.925112016960279, // Replace with actual Top-Left Latitude
+    lon: 77.49763120438986   // Replace with actual Top-Left Longitude
   },
   bottomRight: {
-    lat: 12.922975268142578, // Replace with actual Bottom-Right Latitude
-    lon: 77.50163323386622 // Replace with actual Bottom-Right Longitude
+    lat: 12.922376001546729, // Replace with actual Bottom-Right Latitude
+    lon: 77.50224130319921 // Replace with actual Bottom-Right Longitude
   }
 };
 
