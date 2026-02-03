@@ -3,7 +3,7 @@ import { buildings } from "../data/buildings";
 import { Icon } from "./Icons";
 import "./SearchBar.css";
 
-export default function SearchBar({ onSelectPlace }) {
+export default function SearchBar({ onSelectPlace, user, onOpenAuth, onOpenProfile }) {
     const [query, setQuery] = useState("");
     const [suggestions, setSuggestions] = useState([]);
     const [showDropdown, setShowDropdown] = useState(false);
@@ -111,6 +111,20 @@ export default function SearchBar({ onSelectPlace }) {
                     >
                         {isListening ? <Icon name="stop" size={18} /> : <Icon name="mic" size={18} />}
                     </button>
+
+                    <div className="auth-actions">
+                        {user ? (
+                            <button className="profile-btn" onClick={onOpenProfile} aria-label="Open profile">
+                                <div className="profile-initial">
+                                    {user.username.charAt(0).toUpperCase()}
+                                </div>
+                            </button>
+                        ) : (
+                            <button className="login-btn" onClick={onOpenAuth}>
+                                Login
+                            </button>
+                        )}
+                    </div>
                 </div>
             </div>
 

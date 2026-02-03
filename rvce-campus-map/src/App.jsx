@@ -3,6 +3,8 @@ import SearchPanel from "./components/SearchPanel";
 import SearchBar from "./components/SearchBar";
 import MapView from "./components/MapView";
 import DirectionsPanel from "./components/DirectionsPanel";
+import AuthModal from "./components/AuthModal";
+import ProfileDropdown from "./components/ProfileDropdown";
 import "./App.css";
 
 import { gpsToMap } from "./data/gps";
@@ -17,6 +19,33 @@ export default function App() {
   const [routeRequest, setRouteRequest] = useState(null);
   const [gpsEnabled, setGpsEnabled] = useState(false);
   const [userPos, setUserPos] = useState(null);
+
+  /* ================= AUTH STATE ================= */
+  const [user, setUser] = useState(null);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      // Restore user from token (simplified: in a real app, fetch /profile)
+      fetch('http://localhost:5000/api/profile', {
+        headers: { 'Authorization': `Bearer ${token}` }
+      })
+        .then(res => res.json())
+        .then(data => {
+          if (data.username) setUser(data);
+          else localStorage.removeItem('token');
+        })
+        .catch(() => localStorage.removeItem('token'));
+    }
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    setUser(null);
+    setIsProfileOpen(false);
+  };
 
   /* ================= GPS LOGIC ================= */
   useEffect(() => {
@@ -120,7 +149,28 @@ export default function App() {
 
   return (
     <div className="app-layout">
-      <SearchBar onSelectPlace={handleSelectPlace} />
+      <SearchBar
+        onSelectPlace={handleSelectPlace}
+        user={user}
+        onOpenAuth={() => setIsAuthModalOpen(true)}
+        onOpenProfile={() => setIsProfileOpen(true)}
+      />
+
+      {isAuthModalOpen && (
+        <AuthModal
+          isOpen={isAuthModalOpen}
+          onClose={() => setIsAuthModalOpen(false)}
+          onAuthSuccess={(u) => setUser(u)}
+        />
+      )}
+
+      {isProfileOpen && user && (
+        <ProfileDropdown
+          user={user}
+          onLogout={handleLogout}
+          onClose={() => setIsProfileOpen(false)}
+        />
+      )}
 
       <SearchPanel
         start={routeRequest?.start || ""}

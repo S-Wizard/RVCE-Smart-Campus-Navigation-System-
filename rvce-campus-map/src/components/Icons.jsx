@@ -20,6 +20,9 @@ export const Icon = ({ name, size = 20, className = "", ...props }) => {
         close: (
             <path d="M18 6L6 18M6 6l12 12" />
         ),
+        logout: (
+            <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9" />
+        ),
         location: (
             <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
         ),
