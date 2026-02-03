@@ -29,7 +29,7 @@ export default function App() {
     const token = localStorage.getItem('token');
     if (token) {
       // Restore user from token (simplified: in a real app, fetch /profile)
-      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+      const apiUrl = (import.meta.env.VITE_API_URL || 'http://localhost:5000').replace(/\/$/, '');
       fetch(`${apiUrl}/api/profile`, {
         headers: { 'Authorization': `Bearer ${token}` }
       })
