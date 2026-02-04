@@ -7,7 +7,7 @@ const LandingScreen = ({ onEnter }) => {
             <div className="landing-content">
                 <div className="logo-section">
                     <img src="/rvce-logo.png" alt="RVCE Logo" className="landing-logo" />
-                    <h1 className="landing-title">RV-Way <Findr></Findr></h1>
+                    <h1 className="landing-title">RV-Way Findr</h1>
                     <p className="landing-subtitle">Campus Navigation System.</p>
                 </div>
 
@@ -24,7 +24,7 @@ const LandingScreen = ({ onEnter }) => {
                         <span>Indoor Nav</span>
                         <span>Personalized</span>
                     </div>
-                    <p>© 2026 RVCE Smart Campus Project</p>
+                    <p>© 2026 RV-Way Findr: Campus Navigation Project</p>
                 </div>
             </div>
 
