@@ -7,8 +7,8 @@ const LandingScreen = ({ onEnter }) => {
             <div className="landing-content">
                 <div className="logo-section">
                     <img src="/rvce-logo.png" alt="RVCE Logo" className="landing-logo" />
-                    <h1 className="landing-title">RVCE Smart Campus Navigation</h1>
-                    <p className="landing-subtitle">Discover your campus with ease and precision.</p>
+                    <h1 className="landing-title">RV-Way <Findr></Findr></h1>
+                    <p className="landing-subtitle">Campus Navigation System.</p>
                 </div>
 
                 <button className="enter-button" onClick={onEnter}>
