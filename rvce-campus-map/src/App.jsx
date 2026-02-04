@@ -5,6 +5,7 @@ import MapView from "./components/MapView";
 import DirectionsPanel from "./components/DirectionsPanel";
 import AuthModal from "./components/AuthModal";
 import ProfileDropdown from "./components/ProfileDropdown";
+import LandingScreen from "./components/LandingScreen";
 import "./App.css";
 
 import { gpsToMap } from "./data/gps";
@@ -30,8 +31,33 @@ export default function App() {
   const [favorites, setFavorites] = useState([]);
   const [history, setHistory] = useState([]);
   const [isRouteSaved, setIsRouteSaved] = useState(false);
+  const [hasEntered, setHasEntered] = useState(() => {
+    return sessionStorage.getItem('hasEntered') === 'true';
+  });
 
   const apiUrl = (import.meta.env.VITE_API_URL || 'http://localhost:5000').replace(/\/$/, '');
+
+  const logUsage = async () => {
+    try {
+      const device = window.innerWidth < 768 ? 'mobile' : 'desktop';
+      await fetch(`${apiUrl}/api/usage/log`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId: user?.id || null,
+          device
+        })
+      });
+    } catch (err) {
+      console.error('Error logging usage:', err);
+    }
+  };
+
+  const handleEnter = () => {
+    setHasEntered(true);
+    sessionStorage.setItem('hasEntered', 'true');
+    logUsage();
+  };
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -271,6 +297,10 @@ export default function App() {
   function handleResetAll() {
     setRouteRequest(null);
     setIsSearchOpen(true);
+  }
+
+  if (!hasEntered) {
+    return <LandingScreen onEnter={handleEnter} />;
   }
 
   return (

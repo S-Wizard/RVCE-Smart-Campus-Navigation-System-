@@ -4,6 +4,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import authRoutes from './routes/auth.js';
 import userFeatures from './routes/userFeatures.js';
+import usageRoutes from './routes/usage.js';
 
 dotenv.config();
 
@@ -21,6 +22,7 @@ app.use(express.json());
 app.get('/', (req, res) => res.send('Smart Campus API is Running'));
 app.use('/api', authRoutes);
 app.use('/api/user', userFeatures);
+app.use('/api/usage', usageRoutes);
 
 // Database Connection
 if (!process.env.MONGO_URI) {
