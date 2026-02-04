@@ -28,6 +28,7 @@ export default function MapView({
   onToggleFavorite
 }) {
   const [bearing, setBearing] = useState(0);
+  const [resetKey, setResetKey] = useState(0);
   const [selectedPlace, setSelectedPlace] = useState(null);
   const touchRef = useRef({
     angle: 0,
@@ -77,6 +78,7 @@ export default function MapView({
       onTouchEnd={onTouchEnd}
     >
       <TransformWrapper
+        key={resetKey}
         initialScale={1.4}
         minScale={0.5}
         maxScale={4}
@@ -244,9 +246,9 @@ function MapControls({
         <button
           className="gps-btn reset-btn"
           onClick={() => {
-            // Re-implementing for robustness: smooth zoom, pan, and rotation reset
-            resetTransform(400);
+            console.log("Forcing hard reset of map view...");
             setBearing(0);
+            setResetKey(prev => prev + 1);
           }}
           title="Reset View"
           aria-label="Reset Map"
