@@ -244,8 +244,9 @@ function MapControls({
         <button
           className="gps-btn reset-btn"
           onClick={() => {
-            resetTransform(400); // Smoothly reset zoom and pan
-            setBearing(0); // Reset rotation
+            // Re-implementing for robustness: smooth zoom, pan, and rotation reset
+            resetTransform(400);
+            setBearing(0);
           }}
           title="Reset View"
           aria-label="Reset Map"

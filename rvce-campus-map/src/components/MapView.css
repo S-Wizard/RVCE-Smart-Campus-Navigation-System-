@@ -147,6 +147,17 @@
   width: 44px;
   height: 44px;
   justify-content: center;
+  background: white;
+  color: #1d4ed8;
+  border: 1.5px solid #e2e8f0;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.reset-btn:hover {
+  background: #f8fafc;
+  border-color: #1d4ed8;
+  transform: scale(1.1) rotate(-15deg);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
 }
 
 /* Compass */
